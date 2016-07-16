@@ -1,5 +1,6 @@
 package org.nenita.user.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.ogm.annotation.GraphId;
@@ -9,6 +10,12 @@ import org.neo4j.ogm.annotation.Relationship;
 import org.nenita.graphdb.UUIDable;
 import org.nenita.organization.domain.Company;
 
+/**
+ * Represents a person who uses the networking site
+ * 
+ * @author Nenita Casuga
+ *
+ */
 @NodeEntity(label = "User")
 public class User implements UUIDable {
 
@@ -29,8 +36,12 @@ public class User implements UUIDable {
 	private String firstname;
 	private String lastname;
 
-	@Relationship(type="FOLLOWS", direction=Relationship.OUTGOING)
-    private List<Company> companiesFollowed;
+	// Use this for non-rich relationship, that is, the association has no
+	// additional attributes
+	// @Relationship(type="FOLLOWS", direction=Relationship.OUTGOING)
+	// private List<Company> followedCompanies = new ArrayList<Company>();
+	@Relationship(type = "FOLLOWS")
+    private List<FollowCompany> followRel = new ArrayList<FollowCompany>();
 	
 	public Long getId() {
 		return id;
@@ -52,14 +63,22 @@ public class User implements UUIDable {
 		this.lastname = lastname;
 	}
 
+	public List<FollowCompany> getFollowRel() {
+		return followRel;
+	}
+
+	public void setFollowRel(List<FollowCompany> followRel) {
+		this.followRel = followRel;
+	}
+	
+	/*
 	@Relationship(type = "FOLLOWS", direction = "OUTGOING")
 	public List<Company> getCompaniesFollowed() {
 		return companiesFollowed;
 	}
-
 	public void setCompaniesFollowed(List<Company> companiesFollowed) {
 		this.companiesFollowed = companiesFollowed;
-	}
+	}*/
 	
 	public String getUuid() {
 		return uuid;

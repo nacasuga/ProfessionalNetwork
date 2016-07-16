@@ -1,9 +1,10 @@
 package org.nenita.organization;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nenita.graphdb.CustomNeo4jConfig;
 import org.nenita.organization.domain.Company;
 import org.nenita.organization.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import org.nenita.graphdb.CustomNeo4jConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { CompanyRepositoryTest.TestConfig.class })
@@ -29,19 +28,26 @@ public class CompanyRepositoryTest {
 	}
 
 	@Test
-	public void testSave() {
-		seedCompany();
+	public void testSaveAndUuidGen() {
+		String uuid = seedCompany("MyCompany");
 		Company c = cRepo.findByName("MyCompany");
-		assertNotNull("UUID generated null", c.getUuid());
+		assertEquals("UUID generated incorrect", uuid, c.getUuid());
+	}
+	
+	@Test
+	public void testFindByUuid() {
+		String uuid = seedCompany("GoT");
+		Company c = cRepo.findByUuid(uuid);
+		assertEquals("Company name lookup by UUID incorrect", "GoT", c.getName());
 	}
 
 	// Transactional annotation does not seem to be needed
 	//@Transactional
-	private void seedCompany() {
-
+	private String seedCompany(String companyName) {
 		cRepo.deleteAll();
 		Company c = new Company();
-		c.setName("MyCompany");
+		c.setName(companyName);
 		cRepo.save(c);
+		return c.getUuid();
 	}
 }

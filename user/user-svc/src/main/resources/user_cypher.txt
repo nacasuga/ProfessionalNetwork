@@ -1,3 +1,0 @@
-# Cypher queries needed for the user
-
-CREATE INDEX ON :User(uuid);
