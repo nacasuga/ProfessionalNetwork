@@ -1,5 +1,6 @@
 package org.nenita.user.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class User implements UUIDable {
 	
 	@Relationship(type = "EMPLOYED_AT")
     private List<Employment> employment = new ArrayList<Employment>();
+	
+	@Relationship(type = "FRIENDS")
+    private List<FriendRelationship> friendRels = new ArrayList<FriendRelationship>();
 	
 	public User() {
 		
@@ -94,6 +98,20 @@ public class User implements UUIDable {
 
 	public void setEmployment(List<Employment> employment) {
 		this.employment = employment;
+	}
+
+	public List<FriendRelationship> getFriendRels() {
+		return friendRels;
+	}
+	
+	public void addFriend(User friend) {
+		Long time = Instant.now().toEpochMilli();
+		friendRels.add(new FriendRelationship(this, friend, time));
+		friend.getFriendRels().add(new FriendRelationship(friend, this, time));
+	}
+
+	public void setFriendRels(List<FriendRelationship> friendRels) {
+		this.friendRels = friendRels;
 	}
 
 	public String getUuid() {

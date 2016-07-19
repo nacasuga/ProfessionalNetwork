@@ -7,6 +7,9 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
 /**
+ * Represents the relationship between a user and a company, that is, a user's
+ * employment history including the current employer.
+ * 
  * Use this modeling technique if you have a rich association, that is, a
  * relationship that has attributes
  * 
@@ -38,14 +41,14 @@ public class Employment {
 	// Current employer
 	public Employment(User user, Company employer, String jobTitle, EmploymentDate employedFrom) {
 		this.user = user;
-		this.employer = employer; 
+		this.employer = employer;
 		this.currentEmployer = true;
 		this.jobTitle = jobTitle;
 		this.employedFrom = employedFrom;
 	}
-	
+
 	// Employment history
-	public Employment(User user, Company employer, String jobTitle, EmploymentDate employedFrom, 
+	public Employment(User user, Company employer, String jobTitle, EmploymentDate employedFrom,
 			EmploymentDate employedTo) {
 		this.user = user;
 		this.employer = employer;
@@ -110,11 +113,11 @@ public class Employment {
 	public void setEmployedTo(EmploymentDate employedTo) {
 		this.employedTo = employedTo;
 	}
-	
+
 	public static class EmploymentDate {
 		private Integer month;
 		private Integer year;
-		
+
 		/*public EmploymentDate(Boolean current) {
 			if (current) {
 				LocalDateTime now = LocalDateTime.now();
@@ -122,16 +125,16 @@ public class Employment {
 				this.year = now.getYear();
 			}
 		}*/
-		
+
 		public EmploymentDate(Integer month, Integer year) {
 			this.month = month;
 			this.year = year;
 		}
-		
+
 		public Integer getMonth() {
 			return month;
 		}
-		
+
 		public Integer getYear() {
 			return year;
 		}

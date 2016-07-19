@@ -7,8 +7,11 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
 /**
- * Use this modeling technique if you have a rich association, that is, a relationship
- * that has attributes
+ * Represents the relationship between a user and a company, that is, when a
+ * user decides to follow a particular company.
+ * 
+ * Use this RelationshipEntity modeling technique if you have a rich
+ * association, that is, a relationship that has attributes
  * 
  * @author nenita
  *
@@ -24,19 +27,19 @@ public class FollowCompany {
 
 	@EndNode
 	private Company company;
-	
+
 	private Long followedOn;
 
 	public FollowCompany() {
-		
+
 	}
-	
+
 	public FollowCompany(Company company, User user, Long followedOn) {
 		this.user = user;
 		this.company = company;
 		this.followedOn = followedOn;
 	}
-	
+
 	public Long getFollowedOn() {
 		return followedOn;
 	}
@@ -60,8 +63,5 @@ public class FollowCompany {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
-	
-	
-	
+
 }

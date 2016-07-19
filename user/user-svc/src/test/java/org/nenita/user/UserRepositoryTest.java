@@ -15,6 +15,7 @@ import org.nenita.organization.domain.Company;
 import org.nenita.organization.repository.CompanyRepository;
 import org.nenita.user.domain.Employment;
 import org.nenita.user.domain.FollowCompany;
+import org.nenita.user.domain.FriendRelationship;
 import org.nenita.user.domain.User;
 import org.nenita.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +68,12 @@ public class UserRepositoryTest {
 
 	@Test
 	public void testCountOfFollowers() {
-		seedData.seedFollowCompanyAndUser();
-		Integer countofFollowing = userRepo.findCountofUserFollowingCo("MyCompany");
+		String coUuid1 = seedData.seedFollowCompanyAndUser().get(0);
+		Integer countofFollowing = userRepo.findCountofUserFollowingCo(coUuid1);
 		assertTrue("Count of following MyCompany not 3", countofFollowing == 3);
 		
-		countofFollowing = userRepo.findCountofUserFollowingCo("Piere Herme");
+		coUuid1 = seedData.seedFollowCompanyAndUser().get(1);
+		countofFollowing = userRepo.findCountofUserFollowingCo(coUuid1);
 		assertTrue("Count of following Pierre Herme not 1", countofFollowing == 1);
 	}
 
@@ -88,30 +90,30 @@ public class UserRepositoryTest {
 
 		userRepo.save(user);
 		
-		int countofFollowing = userRepo.findCountofUserFollowingCo("OWN");
+		String uuid = seedData.seedCompany();
+		int countofFollowing = userRepo.findCountofUserFollowingCo(uuid);
 		assertTrue("Count of following OWN not 0", countofFollowing == 0);
 		
-		String uuid = seedData.seedCompany();
 		Company comp = cRepo.findByUuid(uuid);
 		user = userRepo.findByFirstname("Scarface");
 		user.getFollowCompanyRels().add(new FollowCompany(comp, user, Instant.now().toEpochMilli()));
 		userRepo.save(user);
 		
-		countofFollowing = userRepo.findCountofUserFollowingCo("OWN");
+		countofFollowing = userRepo.findCountofUserFollowingCo(uuid);
 		assertTrue("Count of following OWN not 1", countofFollowing == 1);
 	}
 	
 	@Test
 	public void testPaginate() {
-		seedData.seedFollowCompanyAndUser();
-		List<User> users = userRepo.findUsersFollowingCo("MyCompany", 0, 1);
+		String coUuid = seedData.seedFollowCompanyAndUser().get(0);
+		List<User> users = userRepo.findUsersFollowingCo(coUuid, 0, 1);
 		assertEquals("First user following MyCompany in page 1 not Mouse", "Mouse", users.get(0).getFirstname());
 		assertNotNull("Followed on date/ts is null", users.get(0).getFollowCompanyRels().get(0).getFollowedOn());
 
-		users = userRepo.findUsersFollowingCo("MyCompany", 1, 1);
+		users = userRepo.findUsersFollowingCo(coUuid, 1, 1);
 		assertEquals("First user following MyCompany in page 2 not Mickey", "Mickey", users.get(0).getFirstname());
 
-		users = userRepo.findUsersFollowingCo("MyCompany", 2, 1);
+		users = userRepo.findUsersFollowingCo(coUuid, 2, 1);
 		assertEquals("First user following MyCompany in page 3 not Nenita", "Nenita", users.get(0).getFirstname());
 		assertTrue("User is not following 2 companies", users.get(0).getFollowCompanyRels().size() == 2);
 	}
@@ -132,5 +134,36 @@ public class UserRepositoryTest {
 		assertEquals("Employee title not MVP", "MVP", emp2.getJobTitle());
 		assertNull("Employment to date not null", emp2.getEmployedTo());
 		assertTrue("Current employer not true", emp2.getCurrentEmployer());
+	}
+	
+	@Test
+	public void testFriends() {
+		// Nenita has 2 friends: Beyonce and Peter
+		// Beyonce has 2 friends: Nenita and Daenerys
+		// Peter has 1 friend: Nenita
+		
+		seedData.seedFriends();
+		User user = userRepo.findByFirstname("Nenita");
+		List<FriendRelationship> friendRels = user.getFriendRels();
+		assertTrue("Nenita's friend size not 2", friendRels.size() == 2);
+		assertEquals("Nenita's first friend not Beyonce", "Beyonce", 
+				friendRels.get(0).getFriend().getFirstname());
+		assertEquals("Nenita's second friend not Peter", "Peter", 
+				friendRels.get(1).getFriend().getFirstname());
+		
+		user = userRepo.findByFirstname("Beyonce");
+		friendRels = user.getFriendRels();
+		assertTrue("Beyonce's friend size not 2", friendRels.size() == 2);
+		assertEquals("Beyonce's first friend not Nenita", "Nenita", 
+				friendRels.get(0).getFriend().getFirstname());
+		assertEquals("Beyonce's second friend not Daenerys", "Daenerys", 
+				friendRels.get(1).getFriend().getFirstname());
+		
+		user = userRepo.findByFirstname("Peter");
+		friendRels = user.getFriendRels();
+		assertTrue("Peter's friend size not 1", friendRels.size() == 1);
+		assertEquals("Peter's first friend not Nenita", "Nenita", 
+				friendRels.get(0).getFriend().getFirstname());
+		
 	}
 }
