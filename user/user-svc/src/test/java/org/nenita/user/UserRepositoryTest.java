@@ -119,7 +119,7 @@ public class UserRepositoryTest {
 	@Test
 	public void testEmployment() {
 		String cUuid = seedData.seedEmploymentAndUser();
-		List<User> employees = userRepo.findAllEmployees(cUuid);
+		List<User> employees = userRepo.findAllEmployeesOfCo(cUuid);
 		assertTrue("Count of employees for GSW not 2", employees.size() == 2);
 		Employment emp1 = employees.get(0).getEmployment().get(0);
 		assertEquals("Employee name not Draymond", "Draymond", emp1.getUser().getFirstname());

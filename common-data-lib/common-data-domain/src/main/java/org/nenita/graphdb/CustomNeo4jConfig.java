@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.nenita.domain.UUIDable;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.context.ApplicationListener;

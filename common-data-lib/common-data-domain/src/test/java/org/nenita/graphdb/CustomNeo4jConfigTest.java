@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.nenita.graphdb.CustomNeo4jConfig;
-import org.nenita.graphdb.domain.UuidableDomain;
+import org.nenita.test.domain.SampleDomain;
 
 /**
  * 
@@ -27,7 +27,7 @@ public class CustomNeo4jConfigTest {
 				str.contains("org.nenita.graphdb.domain"));
 		assertTrue("Package list does not contain org.nenita.foo.domain",
 				str.contains("org.nenita.foo.domain"));
-		assertTrue("Domain class is not assignable from UUIDable", 
-				config.isClassUuidable(UuidableDomain.class.getName()));
+		assertTrue("Domain class is not assignable from SampleDomain", 
+				config.isClassUuidable(SampleDomain.class.getName()));
 	}
 }

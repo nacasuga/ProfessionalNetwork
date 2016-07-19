@@ -1,4 +1,4 @@
-package org.nenita.graphdb;
+package org.nenita.domain;
 
 /**
  * Marker class to determine that a neo4j entity needs to generate a UUID key

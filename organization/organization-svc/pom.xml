@@ -61,13 +61,9 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
+	<dependency>
 			<groupId>org.nenita</groupId>
-			<artifactId>common-graphdb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-neo4j</artifactId>
+			<artifactId>common-data-domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

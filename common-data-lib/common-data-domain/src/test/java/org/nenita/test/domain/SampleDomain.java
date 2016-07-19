@@ -1,8 +1,8 @@
-package org.nenita.graphdb.domain;
+package org.nenita.test.domain;
 
-import org.nenita.graphdb.UUIDable;
+import org.nenita.domain.UUIDable;
 
-public class UuidableDomain implements UUIDable {
+public class SampleDomain implements UUIDable {
 
 	private String uuid;
 	

@@ -1,6 +1,6 @@
 package org.nenita.organization.domain;
 
-import org.nenita.graphdb.UUIDable;
+import org.nenita.domain.UUIDable;
 import org.neo4j.ogm.annotation.GraphId;
 
 /**

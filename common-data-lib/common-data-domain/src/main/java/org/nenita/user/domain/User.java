@@ -6,8 +6,7 @@ import java.util.List;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import org.nenita.graphdb.UUIDable;
+import org.nenita.domain.UUIDable;
 import org.nenita.organization.domain.Company;
 
 /**
