@@ -41,7 +41,19 @@ public class User implements UUIDable {
 	// @Relationship(type="FOLLOWS", direction=Relationship.OUTGOING)
 	// private List<Company> followedCompanies = new ArrayList<Company>();
 	@Relationship(type = "FOLLOWS")
-    private List<FollowCompany> followRel = new ArrayList<FollowCompany>();
+    private List<FollowCompany> followCompanyRels = new ArrayList<FollowCompany>();
+	
+	@Relationship(type = "EMPLOYED_AT")
+    private List<Employment> employment = new ArrayList<Employment>();
+	
+	public User() {
+		
+	}
+	
+	public User(String firstname, String lastname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
 	
 	public Long getId() {
 		return id;
@@ -63,23 +75,28 @@ public class User implements UUIDable {
 		this.lastname = lastname;
 	}
 
-	public List<FollowCompany> getFollowRel() {
-		return followRel;
+	public List<FollowCompany> getFollowCompanyRels() {
+		return followCompanyRels;
 	}
 
-	public void setFollowRel(List<FollowCompany> followRel) {
-		this.followRel = followRel;
+	public void setFollowCompanyRels(List<FollowCompany> followRel) {
+		this.followCompanyRels = followRel;
 	}
 	
 	/*
 	@Relationship(type = "FOLLOWS", direction = "OUTGOING")
 	public List<Company> getCompaniesFollowed() {
 		return companiesFollowed;
-	}
-	public void setCompaniesFollowed(List<Company> companiesFollowed) {
-		this.companiesFollowed = companiesFollowed;
 	}*/
 	
+	public List<Employment> getEmployment() {
+		return employment;
+	}
+
+	public void setEmployment(List<Employment> employment) {
+		this.employment = employment;
+	}
+
 	public String getUuid() {
 		return uuid;
 	}
