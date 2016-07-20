@@ -14,17 +14,24 @@ public class UserSvc {
 
 	@Autowired
 	private UserRepository userRepo;
-	
-	public List<User> findRecommendedFriends(String userUuid) {
-		List<User> recommendedFriends = new ArrayList<User>();
-		
-		List<Map<String,List<User>>> resIterator = userRepo.findCommonConnection(userUuid);
-		for (Map<String, List<User>> items: resIterator){
-			for (String mapKey: items.keySet()) {
+
+	public List<Recommendation> findRecommendedFriends(String userUuid) {
+		List<Recommendation> recommendedFriends = new ArrayList<Recommendation>();
+
+		List<Map<String, List<User>>> resIterator = userRepo.findCommonConnection(userUuid);
+		for (Map<String, List<User>> items : resIterator) {
+			for (String mapKey : items.keySet()) {
 				// First row = the user itself
 				// Second row = the common friend
 				// Third row = the recommendation based on the common friend
-				recommendedFriends.add(items.get(mapKey).get(2));
+				User recUser = items.get(mapKey).get(2);
+				User connection = items.get(mapKey).get(1);
+				Recommendation rec = new Recommendation(
+						new Recommendation.User(recUser.getFirstname() + " " + recUser.getLastname(),
+								recUser.getUuid()),
+						new Recommendation.User(connection.getFirstname() + " " + connection.getLastname(),
+								connection.getUuid()));
+				recommendedFriends.add(rec);
 			}
 		}
 		return recommendedFriends;

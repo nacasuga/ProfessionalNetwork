@@ -16,7 +16,7 @@ public interface UserRepository extends GraphRepository<User> {
 	/**
 	 * Find friends of a user
 	 * 
-	 * @param userUuid
+	 * @param userUuid UUID of the user whose friends we're trying to find
 	 * @return
 	 */
 	@Query("MATCH (user:User)-[:FRIENDS]->(friend:User) WHERE user.uuid={0} RETURN friend")
@@ -25,11 +25,11 @@ public interface UserRepository extends GraphRepository<User> {
 	/**
 	 * Find 2nd-level FRIENDS path of a user (friends of friends)
 	 * 
-	 * @param userUuid
+	 * @param userUuid of the user we're trying to recommend friends to
 	 * @return
 	 */
 	@Query("MATCH path=(user:User)-[:FRIENDS*2]->(friend:User) WHERE user.uuid={0} "
-			+ "AND friend.firstname <> user.firstname RETURN nodes(path);")
+			+ "AND friend.uuid <> user.uuid RETURN nodes(path);")
 	List<Map<String,List<User>>> findCommonConnection(String userUuid);
 	
 	@Query("MATCH (user:User)-[:FOLLOWS]->(co:Company) WHERE co.uuid={0} RETURN COUNT(user)")

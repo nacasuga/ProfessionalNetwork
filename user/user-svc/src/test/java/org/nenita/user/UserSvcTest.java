@@ -13,6 +13,7 @@ import org.nenita.graphdb.CustomNeo4jConfig;
 import org.nenita.organization.repository.CompanyRepository;
 import org.nenita.user.domain.User;
 import org.nenita.user.repository.UserRepository;
+import org.nenita.user.svc.Recommendation;
 import org.nenita.user.svc.UserSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -53,15 +54,21 @@ public class UserSvcTest {
 		// Find recommendations for Sansa
 		// Answer: Beyonce, Tyrion and Daenerys because of Sansa's connection to Nenita and Jon
 		User user = userRepo.findByFirstname("Sansa");
-		List<User> recommendedFriends = userSvc.findRecommendedFriends(user.getUuid());
+		List<Recommendation> recommendedFriends = userSvc.findRecommendedFriends(user.getUuid());
 		
 		assertTrue("Recommended size not 3", recommendedFriends.size() == 3);
-		assertEquals("First recommended friend not Beyonce", "Beyonce", 
-				recommendedFriends.get(0).getFirstname());
-		assertEquals("First recommended friend not Tyrion", "Tyrion", 
-				recommendedFriends.get(1).getFirstname());
-		assertEquals("First recommended friend not Daenerys", "Daenerys", 
-				recommendedFriends.get(2).getFirstname());
+		assertEquals("First recommended friend not Beyonce Knowles", "Beyonce Knowles", 
+				recommendedFriends.get(0).getRecommendedUser().getName());
+		assertEquals("First connection not Nenita AC", "Nenita AC", 
+				recommendedFriends.get(0).getConnectedThru().getName());
+		assertEquals("Second recommended friend not Tyrion Lanister", "Tyrion Lanister", 
+				recommendedFriends.get(1).getRecommendedUser().getName());
+		assertEquals("Second connection not Nenita AC", "Nenita AC", 
+				recommendedFriends.get(1).getConnectedThru().getName());
+		assertEquals("Third recommended friend not Daenerys Targaryen", "Daenerys Targaryen", 
+				recommendedFriends.get(2).getRecommendedUser().getName());
+		assertEquals("Third connection not Jon Snow", "Jon Snow", 
+				recommendedFriends.get(2).getConnectedThru().getName());
 
 		// Find recommendations for Nenita
 		// Answer: Jon because of Nenita's connection to Sansa
@@ -69,7 +76,9 @@ public class UserSvcTest {
 		recommendedFriends = userSvc.findRecommendedFriends(user.getUuid());
 		
 		assertTrue("Recommended size not 1", recommendedFriends.size() == 1);
-		assertEquals("First recommended friend not Jon", "Jon", 
-				recommendedFriends.get(0).getFirstname());
+		assertEquals("First recommended friend not Jon Snow", "Jon Snow", 
+				recommendedFriends.get(0).getRecommendedUser().getName());
+		assertEquals("First connection not Sansa Stark", "Sansa Stark", 
+				recommendedFriends.get(0).getConnectedThru().getName());
 		}
 }
