@@ -1,12 +1,17 @@
 # ProfessionalNetwork
 
-Sample project/POC for a professional networking using GraphDB (Neo4j), Java and Spring Boot
+Sample project/POC for a professional networking using GraphDB (Neo4j), Java and Spring Boot. This project
+also uses Maven for dependency management, employing inheritance to manage complications of dependency
+library versioning
 
-Also using Maven for dependency management, employing inheritance to manage different libraries
+### Graph of a User-User relationship
+![Alt text](/user/user_friends_graph.jpg?raw=true "Friends Relationship")
 
-![Alt text](/user/user_friends_graph.jpg?raw=true "Optional Title")
+### Graph of a User-Company relationship
+![Alt text](/user/organization_graph.tiff?raw=true "Optional Title")
 
-#Compile and generate lib for local testing
+# To run locally
+### 1. Compile and generate lib for local testing
 Run mvn clean install in the following order:
 - common-pom
 - external-lib-pom
@@ -16,7 +21,7 @@ Run mvn clean install in the following order:
 - organization-svc
 - user-svc
 
-#Run Spring Boot server
+### 2. Run Spring Boot server
 : organization-server
 mvn spring-boot:run
 

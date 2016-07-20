@@ -28,8 +28,8 @@ public class Employment {
 	@EndNode
 	private Company employer;
 
-	private Boolean featuredEmployee;
-	private Boolean currentEmployer;
+	private boolean featuredEmployee;
+	private boolean currentEmployer;
 	private String jobTitle;
 	private EmploymentDate employedFrom;
 	private EmploymentDate employedTo;
@@ -74,19 +74,19 @@ public class Employment {
 		this.employer = employer;
 	}
 
-	public Boolean getFeaturedEmployee() {
+	public boolean getFeaturedEmployee() {
 		return featuredEmployee;
 	}
 
-	public void setFeaturedEmployee(Boolean featuredEmployee) {
+	public void setFeaturedEmployee(boolean featuredEmployee) {
 		this.featuredEmployee = featuredEmployee;
 	}
 
-	public Boolean getCurrentEmployer() {
+	public boolean getCurrentEmployer() {
 		return currentEmployer;
 	}
 
-	public void setCurrentEmployer(Boolean currentEmployer) {
+	public void setCurrentEmployer(boolean currentEmployer) {
 		this.currentEmployer = currentEmployer;
 	}
 
