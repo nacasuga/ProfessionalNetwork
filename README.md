@@ -22,7 +22,9 @@ Run mvn clean install in the following order:
 - user-svc
 
 ### 2. Run Spring Boot servers
+
 Pick one for testing
+
 : user-server
 mvn spring-boot:run
 
@@ -39,6 +41,7 @@ sh neo4j-shell -c <  neo4j-seed-data.cql
 User sample API
 http://localhost:8080/api/user/83da2ad1-35fc-479f-9801-40cf804224d1/recommend-friends
 
+Inline
 Output:
 [
   {
