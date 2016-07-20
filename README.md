@@ -5,10 +5,10 @@ also uses Maven for dependency management, employing inheritance to manage compl
 library versioning
 
 ### Graph of a User-User relationship
-![Alt text](/user/user_friends_graph.jpg?raw=true "Friends Relationship")
+![Alt text](/user/user_friends_graph.jpg?raw=true "User-User Relationship")
 
 ### Graph of a User-Company relationship
-![Alt text](/user/organization_graph.tiff?raw=true "Optional Title")
+![Alt text](/user/organization_graph.jpg?raw=true "User-Company Relationship")
 
 # To run locally
 ### 1. Compile and generate lib for local testing
