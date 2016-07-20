@@ -31,7 +31,7 @@ import com.google.common.reflect.ClassPath;
 @Configuration
 @EnableNeo4jRepositories(basePackages = "org.nenita.*.repository")
 @EnableTransactionManagement
-@ComponentScan(basePackages = "org.nenita.*.domain")
+@ComponentScan(basePackages = {"org.nenita.*.domain"})
 public class CustomNeo4jConfig extends Neo4jConfiguration {
 
 	private List<String> packages = new ArrayList<String>();

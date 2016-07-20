@@ -111,24 +111,14 @@ public class SeedDataForTests {
 	
 	void seedFriends() {
 
-		User u = userRepo.findByFirstname("Nenita");
-		if (u != null) {
-			userRepo.delete(u);
-		}
-		u = userRepo.findByFirstname("Beyonce");
-		if (u != null) {
-			userRepo.delete(u);
-		}
-		u = userRepo.findByFirstname("Sansa");
-		if (u != null) {
-			userRepo.delete(u);
-		}
-		u = userRepo.findByFirstname("Daenerys");
-		if (u != null) {
-			userRepo.delete(u);
-		}
+		deleteUser("Nenita");
+		deleteUser("Beyonce");
+		deleteUser("Sansa");
+		deleteUser("Daenerys");
+		deleteUser("Jon");
+		deleteUser("Tyrion");
 
-		// Nenita has 2 friends: Beyonce and Sansa
+		// Nenita has 3 friends: Beyonce, Sansa, Tyrion
 		
 		// Daenerys has 1 friend: Jon
 		// Jon has 1 friend: Sansa
@@ -136,30 +126,41 @@ public class SeedDataForTests {
 		// Recommendation for Nenita: Daenerys through 2nd level connection
 		
 		// Beyonce has 1 friend: Nenita
-		// Sansa has 1 friend: Nenita
-		// Recommendation for Sansa: Daenerys through Jon
+		// Sansa has 2 friends: Nenita and Jon
+		// Recommendation for Sansa: Daenerys through Jon, Tyrion and Beyonce through Nenita
 		
-		User user = new User("Nenita", "AC");
-		userRepo.save(user);
+		User nenita = new User("Nenita", "AC");
+		userRepo.save(nenita);
 		
-		user = userRepo.findByFirstname("Nenita");
-		User user2 = new User("Beyonce", "Knowles");
-		user2.addFriend(user);
-		userRepo.save(user2);
+		//user = userRepo.findByFirstname("Nenita");
+		User beyonce = new User("Beyonce", "Knowles");
+		beyonce.addFriend(nenita);
+		userRepo.save(beyonce);
 		
-		User user3 = new User("Sansa", "Stark");
-		user3.addFriend(user);
-		userRepo.save(user3);
-		userRepo.save(user);
+		User sansa = new User("Sansa", "Stark");
+		sansa.addFriend(nenita);
+		userRepo.save(sansa);
 		
-		User user4 = new User("Daenerys", "Targaryen");
-		userRepo.save(user4);
+		User tyrion = new User("Tyrion", "Lanister");
+		nenita.addFriend(tyrion);
+		userRepo.save(tyrion);
+		userRepo.save(nenita);
 		
-		User user5 = new User("Jon", "Snow");
-		user5.addFriend(user3);
-		user5.addFriend(user4);
-		userRepo.save(user5);
-		userRepo.save(user3);
-		userRepo.save(user4);
+		User daenerys = new User("Daenerys", "Targaryen");
+		userRepo.save(daenerys);
+		
+		User jon = new User("Jon", "Snow");
+		jon.addFriend(sansa);
+		jon.addFriend(daenerys);
+		userRepo.save(jon);
+		userRepo.save(sansa);
+		userRepo.save(daenerys);
+	}
+	
+	private void deleteUser(String firstname) {
+		User u = userRepo.findByFirstname(firstname);
+		if (u != null) {
+			userRepo.delete(u);
+		}
 	}
 }

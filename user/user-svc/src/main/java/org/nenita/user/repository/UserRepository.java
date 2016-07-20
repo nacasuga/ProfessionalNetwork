@@ -7,6 +7,7 @@ import org.nenita.user.domain.User;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
+// Need to add indexes where needed, especially on recommendations
 public interface UserRepository extends GraphRepository<User> {
 
 	@Query("MATCH (user:User) WHERE user.firstname={0} RETURN user")
