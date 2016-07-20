@@ -119,14 +119,26 @@ public class SeedDataForTests {
 		if (u != null) {
 			userRepo.delete(u);
 		}
-		u = userRepo.findByFirstname("Peter");
+		u = userRepo.findByFirstname("Sansa");
+		if (u != null) {
+			userRepo.delete(u);
+		}
+		u = userRepo.findByFirstname("Daenerys");
 		if (u != null) {
 			userRepo.delete(u);
 		}
 
-		// Nenita has 2 friends: Beyonce and Peter
-		// Beyonce has 2 friends: Nenita and Daenerys
-		// Peter has 1 friend: Nenita
+		// Nenita has 2 friends: Beyonce and Sansa
+		
+		// Daenerys has 1 friend: Jon
+		// Jon has 1 friend: Sansa
+		// Recommendation for Nenita: Jon through Sansa
+		// Recommendation for Nenita: Daenerys through 2nd level connection
+		
+		// Beyonce has 1 friend: Nenita
+		// Sansa has 1 friend: Nenita
+		// Recommendation for Sansa: Daenerys through Jon
+		
 		User user = new User("Nenita", "AC");
 		userRepo.save(user);
 		
@@ -135,13 +147,19 @@ public class SeedDataForTests {
 		user2.addFriend(user);
 		userRepo.save(user2);
 		
-		User user3 = new User("Peter", "Sting");
+		User user3 = new User("Sansa", "Stark");
 		user3.addFriend(user);
 		userRepo.save(user3);
 		userRepo.save(user);
 		
 		User user4 = new User("Daenerys", "Targaryen");
-		user2.addFriend(user4);
+		userRepo.save(user4);
+		
+		User user5 = new User("Jon", "Snow");
+		user5.addFriend(user3);
+		user5.addFriend(user4);
+		userRepo.save(user5);
+		userRepo.save(user3);
 		userRepo.save(user4);
 	}
 }

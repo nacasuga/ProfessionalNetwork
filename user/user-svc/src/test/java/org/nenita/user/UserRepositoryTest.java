@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import com.google.common.collect.Lists;
+
 import javax.annotation.PostConstruct;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -137,10 +142,41 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
+	public void testRecommendation() {
+		seedData.seedFriends();
+		// Find recommendations for Sansa
+		// Answer: Beyonce and Daenerys because of Sansa's connection to Nenita and Jon
+		User user = userRepo.findByFirstname("Sansa");
+		// Sansa - Nenita - Beyonce
+		// Sansa - Jon - Daenerys
+		List<Map<String,List<User>>> resIterator = userRepo.findCommonConnection(user.getUuid());
+		assertTrue("Iterator size not 2", resIterator.size() == 2);
+		int loopCnt = 0;
+		for (Map<String, List<User>> items: resIterator){
+			assertTrue("Set of keys not 1", items.keySet().size() == 1);
+			
+			for (String mapKey: items.keySet()) {
+				loopCnt++;
+				List<User> users = items.get(mapKey);
+				assertTrue("Path size not 3", users.size() == 3);
+				
+				// First row = the user itself
+				// Second row = the common friend
+				// Third row = the recommendation based on the common friend
+				assertEquals("First user in path not Sansa", "Sansa", users.get(0).getFirstname());
+				if (loopCnt == 1) {
+					assertEquals("Second user in path not Nenita", "Nenita", users.get(1).getFirstname());
+					assertEquals("Third user in path not Beyonce", "Beyonce", users.get(2).getFirstname());
+				} else {
+					assertEquals("Second user in path not Jon", "Jon", users.get(1).getFirstname());
+					assertEquals("Third user in path not Daenerys", "Daenerys", users.get(2).getFirstname());
+				}
+			}
+		}
+	}
+	
+	@Test
 	public void testFriends() {
-		// Nenita has 2 friends: Beyonce and Peter
-		// Beyonce has 2 friends: Nenita and Daenerys
-		// Peter has 1 friend: Nenita
 		
 		seedData.seedFriends();
 		User user = userRepo.findByFirstname("Nenita");
@@ -148,22 +184,23 @@ public class UserRepositoryTest {
 		assertTrue("Nenita's friend size not 2", friendRels.size() == 2);
 		assertEquals("Nenita's first friend not Beyonce", "Beyonce", 
 				friendRels.get(0).getFriend().getFirstname());
-		assertEquals("Nenita's second friend not Peter", "Peter", 
+		assertEquals("Nenita's second friend not Sansa", "Sansa", 
 				friendRels.get(1).getFriend().getFirstname());
 		
 		user = userRepo.findByFirstname("Beyonce");
 		friendRels = user.getFriendRels();
-		assertTrue("Beyonce's friend size not 2", friendRels.size() == 2);
+		assertTrue("Beyonce's friend size not 1", friendRels.size() == 1);
 		assertEquals("Beyonce's first friend not Nenita", "Nenita", 
+				friendRels.get(0).getFriend().getFirstname());
+		
+		
+		user = userRepo.findByFirstname("Sansa");
+		friendRels = user.getFriendRels();
+		assertTrue("Sansa's friend size not 2", friendRels.size() == 2);
+		assertEquals("Sansa's first friend not Nenita", "Nenita", 
 				friendRels.get(0).getFriend().getFirstname());
 		assertEquals("Beyonce's second friend not Daenerys", "Daenerys", 
 				friendRels.get(1).getFriend().getFirstname());
-		
-		user = userRepo.findByFirstname("Peter");
-		friendRels = user.getFriendRels();
-		assertTrue("Peter's friend size not 1", friendRels.size() == 1);
-		assertEquals("Peter's first friend not Nenita", "Nenita", 
-				friendRels.get(0).getFriend().getFirstname());
 		
 	}
 }
