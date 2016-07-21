@@ -28,8 +28,8 @@ public class User implements UUIDable {
 	 */
 	@GraphId
 	Long id;
-	
-	//http://blog.armbruster-it.de/2013/08/assigning-uuids-to-neo4j-nodes-and-relationships/
+
+	// http://blog.armbruster-it.de/2013/08/assigning-uuids-to-neo4j-nodes-and-relationships/
 	// Neo4j does not allow UUID data type
 	private String uuid;
 
@@ -41,30 +41,33 @@ public class User implements UUIDable {
 	// @Relationship(type="FOLLOWS", direction=Relationship.OUTGOING)
 	// private List<Company> followedCompanies = new ArrayList<Company>();
 	@Relationship(type = "FOLLOWS")
-    private List<FollowCompany> followCompanyRels = new ArrayList<FollowCompany>();
-	
+	private List<FollowCompany> followCompanyRels = new ArrayList<FollowCompany>();
+
 	@Relationship(type = "EMPLOYED_AT")
-    private List<Employment> employment = new ArrayList<Employment>();
-	
+	private List<Employment> employment = new ArrayList<Employment>();
+
 	@Relationship(type = "FRIENDS")
-    private List<FriendRelationship> friendRels = new ArrayList<FriendRelationship>();
-	
+	private List<FriendRelationship> friendRels = new ArrayList<FriendRelationship>();
+
 	@Relationship(type = "CREATED")
-    private List<StatusCreatedRel> statusCreatedRels = new ArrayList<StatusCreatedRel>();
-	
+	private List<StatusCreatedRel> statusCreatedRels = new ArrayList<StatusCreatedRel>();
+
+	@Relationship(type = "COMMENTED")
+	private List<StatusCommentedRel> statusCommentedRels = new ArrayList<StatusCommentedRel>();
+
 	public User() {
-		
+
 	}
-	
+
 	public User(String firstname, String lastname) {
 		this.firstname = firstname;
 		this.lastname = lastname;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
@@ -88,13 +91,13 @@ public class User implements UUIDable {
 	public void setFollowCompanyRels(List<FollowCompany> followRel) {
 		this.followCompanyRels = followRel;
 	}
-	
+
 	/*
 	@Relationship(type = "FOLLOWS", direction = "OUTGOING")
 	public List<Company> getCompaniesFollowed() {
 		return companiesFollowed;
 	}*/
-	
+
 	public List<Employment> getEmployment() {
 		return employment;
 	}
@@ -106,13 +109,29 @@ public class User implements UUIDable {
 	public List<FriendRelationship> getFriendRels() {
 		return friendRels;
 	}
-	
+
 	public List<StatusCreatedRel> getStatusCreatedRels() {
 		return statusCreatedRels;
 	}
 
 	public void setStatusCreatedRels(List<StatusCreatedRel> statusCreatedRels) {
 		this.statusCreatedRels = statusCreatedRels;
+	}
+
+	public List<StatusCommentedRel> getStatusCommentedRels() {
+		return statusCommentedRels;
+	}
+
+	public void setStatusCommentedRels(List<StatusCommentedRel> statusCommentedRels) {
+		this.statusCommentedRels = statusCommentedRels;
+	}
+
+	public void addStatus(Status status) {
+		statusCreatedRels.add(new StatusCreatedRel(this, status, Instant.now().toEpochMilli()));
+	}
+
+	public void addCommentOnStatus(Status status, String comment) {
+		statusCommentedRels.add(new StatusCommentedRel(this, status, comment, Instant.now().toEpochMilli()));
 	}
 
 	public void addFriend(User friend) {

@@ -226,6 +226,8 @@ public class UserRepositoryTest {
 	@Test
 	public void testStatusUpdate() {
 		List<String> uuids = seedData.seedStatus(false);
+		List<Long> statusIds = seedData.getStatusIds();
+		//statusIds.forEach(item -> System.out.println("Stat id: " + item));
 		assertEquals("Uuids of user 1 before and after changes were altered!",
 				uuids.get(0), uuids.get(1));
 		User user = userRepo.findByFirstname("Nenita");
@@ -243,6 +245,16 @@ public class UserRepositoryTest {
 				"The Lanisters always pay their debt", resIterator.get(1).get("content"));
 		assertEquals("Third update content incorrect", 
 				"The king in the north whose name is Stark", resIterator.get(2).get("content"));
+		
+		// Status update comments, comments on nenita's update
+		List<Map<String,Object>> commentIterator = userRepo.findStatusUpdateComments(statusIds.get(0));
+		assertTrue("Comments resultset row size not 2", commentIterator.size() == 2);
+		assertEquals("First comment not from Sansa", "Sansa Stark", commentIterator.get(0).get("commentor"));
+		assertEquals("Second comment not from Nenita", "Nenita AC", commentIterator.get(1).get("commentor"));
 
+		assertEquals("First comment content incorrect", "And the white walkers with it, sistah!", 
+				commentIterator.get(0).get("comment"));
+		assertEquals("Second comment content incorrect", "You're right!", 
+				commentIterator.get(1).get("comment"));
 	}
 }

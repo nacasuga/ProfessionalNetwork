@@ -6,14 +6,14 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
 /**
- * Represents the status created relationship between a user and the status nodes
- * (User)-[:CREATED]-(Status)
+ * Entity representing commenting on status node relationship
+ * (User)-[:COMMENTED]-(Status)
  * 
  * @author nenita
  *
  */
-@RelationshipEntity(type = "CREATED")
-public class StatusCreatedRel {
+@RelationshipEntity(type = "COMMENTED")
+public class StatusCommentedRel {
 
 	@GraphId
 	private Long nodeId;
@@ -31,30 +31,17 @@ public class StatusCreatedRel {
 	 */
 	private Long date;
 
-	public StatusCreatedRel() {
+	private String comment;
+	
+	public StatusCommentedRel() {
 
 	}
 
-	public StatusCreatedRel(User user, Status status, Long date) {
+	public StatusCommentedRel(User user, Status status, String comment, Long date) {
 		this.user = user;
 		this.status = status;
+		this.comment = comment;
 		this.date = date;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
 	}
 
 	public Long getDate() {
@@ -63,5 +50,13 @@ public class StatusCreatedRel {
 
 	public void setDate(Long date) {
 		this.date = date;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }

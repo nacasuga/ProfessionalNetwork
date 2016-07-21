@@ -7,6 +7,7 @@
 
 #Cleanup
 MATCH (me:User) OPTIONAL MATCH (me)-[r]-() DELETE me,r;
+MATCH (s:Status) DELETE s;
 MATCH (me:Company) OPTIONAL MATCH (me)-[r]-() DELETE me,r;
 
 CREATE (c:Company {uuid: "f3056e86-f903-497e-9c3f-8a11e9e75781", 

@@ -7,6 +7,7 @@ import org.neo4j.ogm.annotation.StartNode;
 
 /**
  * Represents the friend relationship between two users.
+ * (user:User)-[:FRIENDS]-(friend:User)
  * 
  * Use this RelationshipEntity modeling technique if you have a rich
  * association, that is, a relationship that has attributes

@@ -50,6 +50,10 @@ public interface UserRepository extends GraphRepository<User> {
 			+ "ORDER by date DESC;")
 	List<Map<String, Object>> findStatusUpdates(String userUuid);
 
+	@Query("MATCH (u:User)-[c:COMMENTED]->(s:Status) where ID(s) = {0} RETURN u.firstname + ' ' + u.lastname "
+			+ "AS commentor, c.comment AS comment ORDER BY c.date ASC;")
+	List<Map<String, Object>> findStatusUpdateComments(Long statusId);
+	
 	@Query("MATCH (user:User)-[:FOLLOWS]->(co:Company) WHERE co.uuid={0} RETURN COUNT(user)")
 	Integer findCountofUserFollowingCo(String companyUuid);
 

@@ -51,6 +51,11 @@ public class CustomNeo4jConfig extends Neo4jConfiguration {
 		return super.getSession();
 	}
 
+	/*
+	 * This is called only once 
+	 * 
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostConstruct
 	public void prepareSession() throws Exception {

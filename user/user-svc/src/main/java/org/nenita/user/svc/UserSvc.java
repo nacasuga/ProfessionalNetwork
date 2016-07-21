@@ -36,4 +36,7 @@ public class UserSvc {
 		}
 		return recommendedFriends;
 	}
+	
+	// Add method for newsfeed
+	// Add method for comments
 }

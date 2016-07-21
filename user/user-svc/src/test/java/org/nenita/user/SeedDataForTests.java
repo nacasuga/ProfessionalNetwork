@@ -9,6 +9,7 @@ import org.nenita.organization.repository.CompanyRepository;
 import org.nenita.user.domain.Employment;
 import org.nenita.user.domain.FollowCompany;
 import org.nenita.user.domain.Status;
+import org.nenita.user.domain.StatusCommentedRel;
 import org.nenita.user.domain.StatusCreatedRel;
 import org.nenita.user.domain.User;
 import org.nenita.user.repository.UserRepository;
@@ -17,6 +18,7 @@ public class SeedDataForTests {
 
 	private UserRepository userRepo;
 	private CompanyRepository cRepo;
+	private List<Long> statusIds;
 
 	public SeedDataForTests(UserRepository userRepo, CompanyRepository cRepo) {
 		this.userRepo = userRepo;
@@ -154,24 +156,43 @@ public class SeedDataForTests {
 
 	List<String> seedStatus(boolean onlyMine) {
 		List<String> uuids = seedFriends();
+		statusIds = new ArrayList<Long>();
+		
 		User nenita = userRepo.findByFirstname("Nenita");
-		nenita.getStatusCreatedRels().add(new StatusCreatedRel(nenita,
-				new Status("Winter is coming. Father promised.."), Instant.now().toEpochMilli()));
+		Status status = new Status("Winter is coming. Father promised..");
+		nenita.addStatus(status);
 		userRepo.save(nenita);
+		statusIds.add(status.getId());
 		uuids.add(nenita.getUuid());
-
+		
+		User sansa = userRepo.findByFirstname("Sansa");
+		// Status update comments
+		sansa.addCommentOnStatus(status, "And the white walkers with it, sistah!");
+		userRepo.save(sansa);
+		
+		// Add own comment too!
+		nenita.addCommentOnStatus(status, "You're right!");
+		userRepo.save(nenita);
+		
 		if (!onlyMine) {
-			User sansa = userRepo.findByFirstname("Sansa");
-			sansa.getStatusCreatedRels().add(new StatusCreatedRel(sansa,
-					new Status("The king in the north whose name is Stark"), Instant.now().toEpochMilli()));
+			sansa = userRepo.findByFirstname("Sansa");
+			Status statusSansa = new Status("The king in the north whose name is Stark");
+			sansa.addStatus(statusSansa);
 			userRepo.save(sansa);
-			
+			statusIds.add(statusSansa.getId());
+
 			User tyrion = userRepo.findByFirstname("Tyrion");
-			tyrion.getStatusCreatedRels().add(new StatusCreatedRel(tyrion,
-					new Status("The Lanisters always pay their debt"), Instant.now().toEpochMilli()));
+			Status statusTyrion = new Status("The Lanisters always pay their debt");
+			tyrion.addStatus(statusTyrion);
+			tyrion.addCommentOnStatus(statusSansa, "Well, good thing, that prick Ramsey is dead!");
 			userRepo.save(tyrion);
+			statusIds.add(statusTyrion.getId());
 		}
 		return uuids;
+	}
+	
+	List<Long> getStatusIds() {
+		return statusIds;
 	}
 
 	private void deleteUser(String firstname) {
