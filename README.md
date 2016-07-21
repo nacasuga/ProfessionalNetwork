@@ -4,8 +4,11 @@ Sample project/POC for a professional networking using GraphDB (Neo4j), Java and
 also uses Maven for dependency management, employing inheritance to manage complications of dependency
 library versioning
 
-### Graph of a User-User relationship
+### Graph of a User-User relationship [e.g. Friends]
 ![Alt text](/user/user_friends_graph.jpg?raw=true "User-User Relationship")
+
+### Graph of a User-Status relationship
+![Alt text](/user/status_update_graph.jpg?raw=true "User-Status Relationship")
 
 ### Graph of a User-Company relationship
 ![Alt text](/organization/organization_graph.jpg?raw=true "User-Company Relationship")

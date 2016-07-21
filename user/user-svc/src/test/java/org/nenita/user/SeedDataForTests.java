@@ -174,6 +174,10 @@ public class SeedDataForTests {
 		nenita.addCommentOnStatus(status, "You're right!");
 		userRepo.save(nenita);
 		
+		User beyonce = userRepo.findByFirstname("Beyonce");
+		beyonce.addCommentOnStatus(status, "Lemonade!");
+		userRepo.save(beyonce);
+		
 		if (!onlyMine) {
 			sansa = userRepo.findByFirstname("Sansa");
 			Status statusSansa = new Status("The king in the north whose name is Stark");

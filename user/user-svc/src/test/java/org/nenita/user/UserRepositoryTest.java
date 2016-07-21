@@ -248,13 +248,16 @@ public class UserRepositoryTest {
 		
 		// Status update comments, comments on nenita's update
 		List<Map<String,Object>> commentIterator = userRepo.findStatusUpdateComments(statusIds.get(0));
-		assertTrue("Comments resultset row size not 2", commentIterator.size() == 2);
+		assertTrue("Comments resultset row size not 3", commentIterator.size() == 3);
 		assertEquals("First comment not from Sansa", "Sansa Stark", commentIterator.get(0).get("commentor"));
 		assertEquals("Second comment not from Nenita", "Nenita AC", commentIterator.get(1).get("commentor"));
-
+		assertEquals("Third comment not from Beyonce", "Beyonce Knowles", commentIterator.get(2).get("commentor"));
+		
 		assertEquals("First comment content incorrect", "And the white walkers with it, sistah!", 
 				commentIterator.get(0).get("comment"));
 		assertEquals("Second comment content incorrect", "You're right!", 
 				commentIterator.get(1).get("comment"));
+		assertEquals("Third comment content incorrect", "Lemonade!", 
+				commentIterator.get(2).get("comment"));
 	}
 }
