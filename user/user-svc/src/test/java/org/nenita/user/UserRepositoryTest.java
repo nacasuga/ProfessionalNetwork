@@ -6,9 +6,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +27,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import com.google.common.collect.Lists;
-
-import javax.annotation.PostConstruct;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { UserRepositoryTest.TestConfig.class })
@@ -152,6 +149,7 @@ public class UserRepositoryTest {
 		// Sansa - Jon - Daenerys
 		List<Map<String,List<User>>> resIterator = userRepo.findCommonConnection(user.getUuid());
 		assertTrue("Iterator size not 3", resIterator.size() == 3);
+		
 		int loopCnt = 0;
 		for (Map<String, List<User>> items: resIterator){
 			assertTrue("Set of keys not 1", items.keySet().size() == 1);
@@ -207,6 +205,44 @@ public class UserRepositoryTest {
 				friendRels.get(0).getFriend().getFirstname());
 		assertEquals("Sansa's second friend not Jon", "Jon", 
 				friendRels.get(1).getFriend().getFirstname());
+	}
+	
+	@Test
+	public void testStatusUpdateOnlyMine() {
+		List<String> uuids = seedData.seedStatus(true);
+		assertEquals("Uuids of user 1 before and after changes were altered!",
+				uuids.get(0), uuids.get(1));
+		User user = userRepo.findByFirstname("Nenita");
+		List<Map<String,Object>> resIterator = userRepo.findStatusUpdates(user.getUuid());
 		
+		// Size of rows
+		assertTrue("Resultset row size not 1", resIterator.size() == 1);
+		assertEquals("First update not from Nenita", "Nenita AC", resIterator.get(0).get("name"));
+		
+		assertEquals("First update content incorrect", 
+				"Winter is coming. Father promised..", resIterator.get(0).get("content"));
+	}
+	
+	@Test
+	public void testStatusUpdate() {
+		List<String> uuids = seedData.seedStatus(false);
+		assertEquals("Uuids of user 1 before and after changes were altered!",
+				uuids.get(0), uuids.get(1));
+		User user = userRepo.findByFirstname("Nenita");
+		List<Map<String,Object>> resIterator = userRepo.findStatusUpdates(user.getUuid());
+		
+		// Size of rows
+		assertTrue("Resultset row size not 3", resIterator.size() == 3);
+		assertEquals("First update not from Nenita", "Nenita AC", resIterator.get(0).get("name"));
+		assertEquals("Second update not from Tyrion", "Tyrion Lanister", resIterator.get(1).get("name"));
+		assertEquals("Third update not from Sansa", "Sansa Stark", resIterator.get(2).get("name"));
+		
+		assertEquals("First update content incorrect", 
+				"Winter is coming. Father promised..", resIterator.get(0).get("content"));
+		assertEquals("Second update content incorrect", 
+				"The Lanisters always pay their debt", resIterator.get(1).get("content"));
+		assertEquals("Third update content incorrect", 
+				"The king in the north whose name is Stark", resIterator.get(2).get("content"));
+
 	}
 }

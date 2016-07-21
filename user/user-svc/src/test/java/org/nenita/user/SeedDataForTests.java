@@ -8,6 +8,8 @@ import org.nenita.organization.domain.Company;
 import org.nenita.organization.repository.CompanyRepository;
 import org.nenita.user.domain.Employment;
 import org.nenita.user.domain.FollowCompany;
+import org.nenita.user.domain.Status;
+import org.nenita.user.domain.StatusCreatedRel;
 import org.nenita.user.domain.User;
 import org.nenita.user.repository.UserRepository;
 
@@ -24,18 +26,9 @@ public class SeedDataForTests {
 	List<String> seedFollowCompanyAndUser() {
 
 		List<String> coUuids = new ArrayList<String>();
-		User u = userRepo.findByFirstname("Nenita");
-		if (u != null) {
-			userRepo.delete(u);
-		}
-		u = userRepo.findByFirstname("Mickey");
-		if (u != null) {
-			userRepo.delete(u);
-		}
-		u = userRepo.findByFirstname("Mouse");
-		if (u != null) {
-			userRepo.delete(u);
-		}
+		deleteUser("Nenita");
+		deleteUser("Mickey");
+		deleteUser("Mouse");
 		cRepo.deleteAll();
 
 		Company myCo = new Company();
@@ -58,10 +51,10 @@ public class SeedDataForTests {
 		user = new User("Mouse", "AC");
 		user.getFollowCompanyRels().add(new FollowCompany(companySaved, user, Instant.now().toEpochMilli()));
 		userRepo.save(user);
-		
+
 		coUuids.add(companySaved.getUuid());
 		coUuids.add(companySaved2.getUuid());
-		
+
 		return coUuids;
 	}
 
@@ -86,10 +79,8 @@ public class SeedDataForTests {
 
 	String seedEmploymentAndUser() {
 
-		User u = userRepo.findByFirstname("Steph");
-		if (u != null) {
-			userRepo.delete(u);
-		}
+		deleteUser("Steph");
+		deleteUser("Draymond");
 		cRepo.deleteAll();
 
 		Company myCo = new Company();
@@ -97,20 +88,19 @@ public class SeedDataForTests {
 		Company companySaved = cRepo.save(myCo);
 
 		User user = new User("Steph", "Curry");
-		user.getEmployment().add(new Employment(user, companySaved, "MVP", 
-				new Employment.EmploymentDate(01, 2012)));
+		user.getEmployment().add(new Employment(user, companySaved, "MVP", new Employment.EmploymentDate(01, 2012)));
 		userRepo.save(user);
-		
+
 		user = new User("Draymond", "Green");
-		user.getEmployment().add(new Employment(user, companySaved, "Guard", 
-				new Employment.EmploymentDate(10, 2011)));
+		user.getEmployment().add(new Employment(user, companySaved, "Guard", new Employment.EmploymentDate(10, 2011)));
 		userRepo.save(user);
-		
+
 		return myCo.getUuid();
 	}
-	
-	void seedFriends() {
 
+	List<String> seedFriends() {
+
+		List<String> uuidsSet = new ArrayList<String>();
 		deleteUser("Nenita");
 		deleteUser("Beyonce");
 		deleteUser("Sansa");
@@ -119,44 +109,71 @@ public class SeedDataForTests {
 		deleteUser("Tyrion");
 
 		// Nenita has 3 friends: Beyonce, Sansa, Tyrion
-		
+
 		// Daenerys has 1 friend: Jon
 		// Jon has 1 friend: Sansa
 		// Recommendation for Nenita: Jon through Sansa
 		// Recommendation for Nenita: Daenerys through 2nd level connection
-		
+
 		// Beyonce has 1 friend: Nenita
 		// Sansa has 2 friends: Nenita and Jon
-		// Recommendation for Sansa: Daenerys through Jon, Tyrion and Beyonce through Nenita
-		
+		// Recommendation for Sansa: Daenerys through Jon, Tyrion and Beyonce
+		// through Nenita
+
 		User nenita = new User("Nenita", "AC");
 		userRepo.save(nenita);
-		
-		//user = userRepo.findByFirstname("Nenita");
+		uuidsSet.add(nenita.getUuid());
+
+		// user = userRepo.findByFirstname("Nenita");
 		User beyonce = new User("Beyonce", "Knowles");
 		beyonce.addFriend(nenita);
 		userRepo.save(beyonce);
-		
+
 		User sansa = new User("Sansa", "Stark");
 		sansa.addFriend(nenita);
 		userRepo.save(sansa);
-		
+
 		User tyrion = new User("Tyrion", "Lanister");
 		nenita.addFriend(tyrion);
 		userRepo.save(tyrion);
 		userRepo.save(nenita);
-		
+		uuidsSet.add(nenita.getUuid());
+
 		User daenerys = new User("Daenerys", "Targaryen");
 		userRepo.save(daenerys);
-		
+
 		User jon = new User("Jon", "Snow");
 		jon.addFriend(sansa);
 		jon.addFriend(daenerys);
 		userRepo.save(jon);
 		userRepo.save(sansa);
 		userRepo.save(daenerys);
+
+		return uuidsSet;
 	}
-	
+
+	List<String> seedStatus(boolean onlyMine) {
+		List<String> uuids = seedFriends();
+		User nenita = userRepo.findByFirstname("Nenita");
+		nenita.getStatusCreatedRels().add(new StatusCreatedRel(nenita,
+				new Status("Winter is coming. Father promised.."), Instant.now().toEpochMilli()));
+		userRepo.save(nenita);
+		uuids.add(nenita.getUuid());
+
+		if (!onlyMine) {
+			User sansa = userRepo.findByFirstname("Sansa");
+			sansa.getStatusCreatedRels().add(new StatusCreatedRel(sansa,
+					new Status("The king in the north whose name is Stark"), Instant.now().toEpochMilli()));
+			userRepo.save(sansa);
+			
+			User tyrion = userRepo.findByFirstname("Tyrion");
+			tyrion.getStatusCreatedRels().add(new StatusCreatedRel(tyrion,
+					new Status("The Lanisters always pay their debt"), Instant.now().toEpochMilli()));
+			userRepo.save(tyrion);
+		}
+		return uuids;
+	}
+
 	private void deleteUser(String firstname) {
 		User u = userRepo.findByFirstname(firstname);
 		if (u != null) {

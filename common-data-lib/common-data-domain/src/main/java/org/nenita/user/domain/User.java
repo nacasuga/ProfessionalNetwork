@@ -49,6 +49,9 @@ public class User implements UUIDable {
 	@Relationship(type = "FRIENDS")
     private List<FriendRelationship> friendRels = new ArrayList<FriendRelationship>();
 	
+	@Relationship(type = "CREATED")
+    private List<StatusCreatedRel> statusCreatedRels = new ArrayList<StatusCreatedRel>();
+	
 	public User() {
 		
 	}
@@ -104,6 +107,14 @@ public class User implements UUIDable {
 		return friendRels;
 	}
 	
+	public List<StatusCreatedRel> getStatusCreatedRels() {
+		return statusCreatedRels;
+	}
+
+	public void setStatusCreatedRels(List<StatusCreatedRel> statusCreatedRels) {
+		this.statusCreatedRels = statusCreatedRels;
+	}
+
 	public void addFriend(User friend) {
 		Long time = Instant.now().toEpochMilli();
 		friendRels.add(new FriendRelationship(this, friend, time));

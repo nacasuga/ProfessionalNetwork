@@ -12,29 +12,47 @@ public interface UserRepository extends GraphRepository<User> {
 
 	@Query("MATCH (user:User) WHERE user.firstname={0} RETURN user")
 	User findByFirstname(String firstname);
-	
+
 	/**
 	 * Find friends of a user
 	 * 
-	 * @param userUuid UUID of the user whose friends we're trying to find
+	 * @param userUuid
+	 *            UUID of the user whose friends we're trying to find
 	 * @return
 	 */
 	@Query("MATCH (user:User)-[:FRIENDS]->(friend:User) WHERE user.uuid={0} RETURN friend")
 	List<User> findFriends(String userUuid);
-	
+
 	/**
 	 * Find 2nd-level FRIENDS path of a user (friends of friends)
 	 * 
-	 * @param userUuid of the user we're trying to recommend friends to
+	 * @param userUuid
+	 *            of the user we're trying to recommend friends to
 	 * @return
 	 */
 	@Query("MATCH path=(user:User)-[:FRIENDS*2]->(friend:User) WHERE user.uuid={0} "
 			+ "AND friend.uuid <> user.uuid RETURN nodes(path);")
-	List<Map<String,List<User>>> findCommonConnection(String userUuid);
-	
+	List<Map<String, List<User>>> findCommonConnection(String userUuid);
+
+	/**
+	 * Find status updates from user and user's friends. For now the result is
+	 * always user's own first + friends order by date DESC
+	 * 
+	 * @param userUuid
+	 *            The user ID whose status update is being retrieved
+	 * @return For now the result is always user's own first + friends order by
+	 *         date DESC
+	 */
+	@Query("MATCH (me:User)-[c:CREATED]->(s:Status) WHERE me.uuid = {0} "
+			+ "RETURN c.date AS date, s.content AS content, me.firstname + ' ' + me.lastname AS name UNION "
+			+ "MATCH (me:User)-[:FRIENDS]->(friend:User)-[c:CREATED]->(s:Status) WHERE me.uuid={0} "
+			+ "RETURN c.date AS date, s.content AS content, friend.firstname + ' ' + friend.lastname AS name "
+			+ "ORDER by date DESC;")
+	List<Map<String, Object>> findStatusUpdates(String userUuid);
+
 	@Query("MATCH (user:User)-[:FOLLOWS]->(co:Company) WHERE co.uuid={0} RETURN COUNT(user)")
 	Integer findCountofUserFollowingCo(String companyUuid);
-	
+
 	/**
 	 * Find all employees of a company
 	 * 
@@ -43,7 +61,7 @@ public interface UserRepository extends GraphRepository<User> {
 	 */
 	@Query("MATCH (user:User)-[:EMPLOYED_AT]->(co:Company) WHERE co.uuid={0} RETURN user")
 	List<User> findAllEmployeesOfCo(String companyUuid);
-	
+
 	/**
 	 * Find users following a company, paginated
 	 * 
@@ -55,6 +73,5 @@ public interface UserRepository extends GraphRepository<User> {
 	// Skip a number of results
 	@Query("MATCH (user:User)-[:FOLLOWS]->(co:Company) WHERE co.uuid={0} RETURN user SKIP {1} LIMIT {2}")
 	List<User> findUsersFollowingCo(String companyUuid, Integer skipResultsSize, Integer limitResultsSize);
-	
-	
+
 }

@@ -31,7 +31,7 @@ import com.google.common.reflect.ClassPath;
 @Configuration
 @EnableNeo4jRepositories(basePackages = "org.nenita.*.repository")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"org.nenita.*.domain"})
+@ComponentScan(basePackages = { "org.nenita.*.domain" })
 public class CustomNeo4jConfig extends Neo4jConfiguration {
 
 	private List<String> packages = new ArrayList<String>();
@@ -76,7 +76,10 @@ public class CustomNeo4jConfig extends Neo4jConfiguration {
 			public void onApplicationEvent(BeforeSaveEvent event) {
 				if (uuidables.contains(event.getEntity().getClass().getName())) {
 					UUIDable entity = (UUIDable) event.getEntity();
-					entity.setUuid(UUID.randomUUID().toString());
+					// Generate only entity uuid if not present yet!
+					if (entity.getUuid() == null || entity.getUuid().trim().length() == 0) {
+						entity.setUuid(UUID.randomUUID().toString());
+					}
 				}
 			}
 		};
