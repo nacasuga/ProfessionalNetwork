@@ -1,8 +1,4 @@
-Common POM setup for use across platform APIs
-=======
-# ProfessionalNetwork
+# Common POM setup for use across platform APIs
 
-Sample project/POC for a professional networking using GraphDB (Neo4j), Java and Spring Boot
-
-Also using Maven for dependency management, employing inheritance to manage complexities of
-versioning library dependency
+It is meant to contain only the repository definition for distribution and maven plugin configuration
+All other POMs must extend from this
