@@ -4,8 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<name>Internal library versioning, without the common</name>
 
+	<groupId>org.nenita</groupId>
 	<artifactId>all-internal-pom</artifactId>
 	<packaging>pom</packaging>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.nenita</groupId>
