@@ -30,8 +30,10 @@ Either:
 Change URI to provide your own username/passwd
 
 - Use embedded neo4j, change user/user-server/src/main/resources/ogm.properties to this
+```
 driver=org.neo4j.ogm.drivers.embedded.driver.EmbeddedDriver
 URI=file:///var/tmp/neo4j.db
+```
 
 ### 3. Seed data:
 
@@ -67,6 +69,7 @@ Inside dependencies:
 	<artifactId>neo4j-ogm-core</artifactId>
 	<scope>runtime</scope>
 </dependency>
+```
 		    
 ### 4. Run Spring Boot servers
 
