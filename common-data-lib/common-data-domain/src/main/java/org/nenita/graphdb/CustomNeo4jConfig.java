@@ -24,8 +24,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.google.common.reflect.ClassPath;
 
 /**
+ * Neo4j custom configuration that does the following:
  * 
- * @author Nenita Casuga
+ * <ul>
+ * <li>Defines the base packaging for scanning repositories and domain entities</li>
+ * <li>Provides an annotation to determine the actual location of domain entities for each component</li>
+ * <li>Provides a interceptor that would generate UUID every time a {@link org.nenita.domain.UUiDable} entity is persisted
+ * </li>
+ * </ul>
+ * 
+ * @author nenita
  *
  */
 @Configuration

@@ -11,9 +11,11 @@ import org.nenita.domain.UUIDable;
 import org.nenita.organization.domain.Company;
 
 /**
- * Represents a person who uses the networking site
+ * Represents a person who uses the networking site. This should implement the
+ * marker class UUIDable in order to generate its unique UUID upon persistence.
+ * Neo4j ID is not good enough as an identifier to be exposed to API level
  * 
- * @author Nenita Casuga
+ * @author nenita
  *
  */
 @NodeEntity(label = "User")

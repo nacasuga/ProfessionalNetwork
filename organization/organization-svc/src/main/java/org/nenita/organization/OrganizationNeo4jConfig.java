@@ -3,8 +3,9 @@ package org.nenita.organization;
 import org.nenita.graphdb.CustomNeo4jDomainPackage;
 
 /**
+ * Configuration declaring the location of organization/company domains
  * 
- * @author Nenita Casuga
+ * @author nenita
  *
  */
 @CustomNeo4jDomainPackage(packages="org.nenita.organization.domain")

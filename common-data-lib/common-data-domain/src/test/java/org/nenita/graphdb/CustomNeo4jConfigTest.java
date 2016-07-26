@@ -10,7 +10,7 @@ import org.nenita.test.domain.SampleDomain;
 
 /**
  * 
- * @author Nenita Casuga
+ * @author nenita
  *
  */
 public class CustomNeo4jConfigTest {

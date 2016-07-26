@@ -7,8 +7,15 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to define the packages to be scanned as Neo4j domain entity
+ * <br>
+ * Sample usage:
  * 
- * @author Nenita Casuga
+ * <pre>
+ * 	&#64;CustomNeo4jDomainPackage(packages = "org.nenita.user.domain")
+ * 	public class UserNeo4jConfig {}
+ * </pre>
+ * 
+ * @author nenita
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

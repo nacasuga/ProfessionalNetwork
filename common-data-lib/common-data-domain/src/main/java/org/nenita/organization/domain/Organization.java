@@ -4,8 +4,12 @@ import org.nenita.domain.UUIDable;
 import org.neo4j.ogm.annotation.GraphId;
 
 /**
+ * Base class representing any type of organization. One concrete implementation
+ * is a company. This should implement the marker class UUIDable in order to
+ * generate its unique UUID upon persistence. Neo4j ID is not good enough as an
+ * identifier to be exposed to API level
  * 
- * @author Nenita Casuga
+ * @author nenita
  *
  */
 public abstract class Organization implements UUIDable {
@@ -18,16 +22,15 @@ public abstract class Organization implements UUIDable {
 	@GraphId
 	Long id;
 
-	//@Indexed(unique=true)
 	private String uuid;
 	private String name;
 	private String website;
 	private String summary;
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -51,11 +54,11 @@ public abstract class Organization implements UUIDable {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-	
+
 	public void setUuid(String uuid) {
-		this.uuid = uuid;	
+		this.uuid = uuid;
 	}
-	
+
 	public String getUuid() {
 		return uuid;
 	}

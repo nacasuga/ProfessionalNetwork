@@ -4,7 +4,8 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
- * Status update, will show up in newsfeed
+ * Represents the status update. Related to the user via the {@link StatusCommentedRel}
+ * and {@link StatusCreatedRel} classes. This can show up in relevant newsfeed
  * 
  * @author nenita
  *

@@ -5,8 +5,9 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
+ * Neo4j queries related to the Company domain
  * 
- * @author Nenita Casuga
+ * @author nenita
  *
  */
 public interface CompanyRepository extends GraphRepository<Company> {
