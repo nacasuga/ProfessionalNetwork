@@ -61,7 +61,7 @@ public class SeedDataForTests {
 	}
 
 	void seedUser() {
-		userRepo.deleteAll();
+		deleteUser("Nenita");
 		User p = new User();
 		p.setFirstname("Nenita");
 		p.setLastname("AC");

@@ -67,6 +67,13 @@ public class UserRepositoryTest {
 		User p = userRepo.findByFirstname("Nenita");
 		assertNotNull("UUID generated null", p.getUuid());
 	}
+	
+	@Test
+	public void testFindByName() {
+		seedData.seedUser();
+		User p = userRepo.findByName("Nenita", "AC");
+		assertNotNull("Nenita AC user null", p);
+	}
 
 	@Test
 	public void testCountOfFollowers() {

@@ -12,6 +12,9 @@ public interface UserRepository extends GraphRepository<User> {
 
 	@Query("MATCH (user:User) WHERE user.firstname={0} RETURN user")
 	User findByFirstname(String firstname);
+	
+	@Query("MATCH (user:User) WHERE user.firstname={0} AND user.lastname={1} RETURN user")
+	User findByName(String firstname, String lastname);
 
 	/**
 	 * Find friends of a user
