@@ -1,8 +1,7 @@
 # ProfessionalNetwork
 
 Sample project/POC for a professional networking using GraphDB (Neo4j), Java and Spring Boot. This project
-also uses Maven for dependency management, employing inheritance to manage complications of dependency
-library versioning
+also uses Maven for dependency management, employing inheritance and composition to manage complications of dependency library versioning
 
 ### Graph of a User-User relationship [e.g. Friends]
 ![Alt text](/user/user_friends_graph.jpg?raw=true "User-User Relationship")
@@ -14,6 +13,8 @@ library versioning
 ![Alt text](/organization/organization_graph.jpg?raw=true "User-Company Relationship")
 
 # To run locally
+Assumes JDK 1.8, maven are already installed
+
 ### 1. Compile and generate lib for local testing
 Run mvn clean install in the following order:
 - common-pom
@@ -85,11 +86,11 @@ mvn spring-boot:run
 
 User sample API
 First, get the UUID of the user
-http://localhost:8080/api/user?firstname=Sansa&lastname=Stark
+```http://localhost:8080/api/user?firstname=Sansa&lastname=Stark```
 
 Then use that UUID to get the list of recommended friends,
 E.g. 
-http://localhost:8080/api/user/9d47b1fe-4b11-4b6d-a0ef-abd1deb3dcaa/recommend-friends
+```http://localhost:8080/api/user/9d47b1fe-4b11-4b6d-a0ef-abd1deb3dcaa/recommend-friends```
 
 Output of recommendations for Sansa based on 2nd-level friendship (see diagram above):
 
