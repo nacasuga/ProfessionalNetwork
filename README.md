@@ -86,11 +86,15 @@ mvn spring-boot:run
 
 User sample API
 First, get the UUID of the user
-```http://localhost:8080/api/user?firstname=Sansa&lastname=Stark```
+```
+http://localhost:8080/api/user?firstname=Sansa&lastname=Stark
+```
 
 Then use that UUID to get the list of recommended friends,
 E.g. 
-```http://localhost:8080/api/user/9d47b1fe-4b11-4b6d-a0ef-abd1deb3dcaa/recommend-friends```
+```
+http://localhost:8080/api/user/9d47b1fe-4b11-4b6d-a0ef-abd1deb3dcaa/recommend-friends
+```
 
 Output of recommendations for Sansa based on 2nd-level friendship (see diagram above):
 
